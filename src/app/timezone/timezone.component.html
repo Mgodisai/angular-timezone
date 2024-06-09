@@ -1,0 +1,13 @@
+<div
+  (click)="selectTimezone()"
+  [ngClass]="{ 'current-timezone': isCurrent, 'other-timezone': !isCurrent }"
+>
+  <p>Timezone: {{ timezone }}</p>
+  <p>Actual time: {{ currentTime }}</p>
+  <button
+    (click)="updateTime(); $event.stopPropagation()"
+    [disabled]="isCurrent"
+  >
+    Refresh
+  </button>
+</div>
