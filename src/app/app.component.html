@@ -1,10 +1,45 @@
 <h1>{{ title }}</h1>
-<p>{{ desc }}</p>
+<h3>{{ desc }}</h3>
 
-<div *ngFor="let timezone of timezones">
-  <app-timezone
-    [timezone]="timezone"
-    [isCurrent]="selectedTimezone === timezone"
-    (timezoneChanged)="onTimezoneSelected($event)"
-  ></app-timezone>
+<div class="controls">
+  <label for="max-timezones">Max components:</label>
+  <input
+    id="max-timezones"
+    type="number"
+    [(ngModel)]="maxTimezones"
+    min="1"
+    [max]="maxAvailableTimezones"
+  />
+  <button
+    *ngIf="usedTimezones.length < maxTimezones"
+    (click)="addRandomTimezone()"
+  >
+    New random timezone
+  </button>
+</div>
+
+<p class="status">
+  Currently added components: {{ usedTimezones.length }} / {{ maxTimezones }}
+</p>
+
+<div class="container">
+  <div *ngFor="let timezone of usedTimezones">
+    <app-timezone
+      [timezone]="timezone"
+      [isCurrent]="selectedTimezone === timezone"
+      [allTimezones]="availableTimezones"
+      [currentTimezones]="usedTimezones"
+      (timezoneSelected)="onTimezoneSelected($event)"
+      (remove)="removeTimezone($event)"
+      (timezoneUpdated)="updateTimezone($event)"
+    ></app-timezone>
+  </div>
+</div>
+<div class="available-timezones">
+  <h2>Additional time zones available</h2>
+  <ul>
+    <li *ngFor="let timezone of getAvailableTimezonesSorted()">
+      {{ timezone }}
+    </li>
+  </ul>
 </div>

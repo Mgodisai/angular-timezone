@@ -1,26 +1,50 @@
+.timezone-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid;
+  border-radius: 5%;
+  box-sizing: border-box;
+  padding: 10px;
+  min-width: 200px;
+  max-width: 250px;
+}
+
 .current-timezone {
   background-color: lightgreen;
-  border-color: #76b852;
+  border-color: darkgreen;
 }
 
 .other-timezone {
   background-color: lightgray;
-  border-color: #ccc;
+  border-color: darkslategray;
 }
 
-div {
-  margin: 10px;
-  padding: 5px;
-  border: 2px solid black;
-  border-radius: 5px;
-}
-
-p {
+.timezone-input input {
   font-weight: bold;
+  text-align: center;
+  color: black;
+  border: none;
+  background: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  padding: 5px;
+  border: 2px solid transparent;
+}
+
+.timezone-input input:focus {
+  border: 2px solid #007bff;
+  background-color: #e6f7ff;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
 }
 
 button {
-  margin-right: 10px;
+  margin-top: auto;
   padding: 5px 10px;
   font-size: 14px;
   border: none;
@@ -43,4 +67,22 @@ button:hover:not(:disabled) {
 
 button:active:not(:disabled) {
   background-color: #004085;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.delete-btn:active:not(:disabled) {
+  background-color: #bd2130;
+}
+
+.current-time {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
 }

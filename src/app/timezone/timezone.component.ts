@@ -1,22 +1,33 @@
 import { Input, Output, Component, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-timezone',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './timezone.component.html',
-  styleUrl: './timezone.component.scss',
+  styleUrls: ['./timezone.component.scss'],
 })
 export class TimezoneComponent {
   @Input() timezone: string = '';
   @Input() isCurrent: boolean = false;
-  @Output() timezoneChanged = new EventEmitter<string>();
+  @Input() allTimezones: string[] = [];
+  @Input() currentTimezones: string[] = [];
+  @Output() timezoneSelected = new EventEmitter<string>();
+  @Output() remove = new EventEmitter<string>();
+  @Output() timezoneUpdated = new EventEmitter<{
+    oldTimezone: string;
+    newTimezone: string;
+  }>();
   currentTime: string = '';
   private updateInterval: any = null;
+  private previousTimezone: string = '';
 
   ngOnInit() {
+    this.previousTimezone = this.timezone;
     this.updateTime();
+    this.startAutoUpdate();
   }
 
   ngOnDestroy() {
@@ -24,7 +35,7 @@ export class TimezoneComponent {
   }
 
   selectTimezone() {
-    this.timezoneChanged.emit(this.timezone);
+    this.timezoneSelected.emit(this.timezone);
     this.startAutoUpdate();
   }
 
@@ -49,6 +60,36 @@ export class TimezoneComponent {
     });
     if (!this.isCurrent) {
       this.stopAutoUpdate();
+    }
+  }
+
+  removeTimezone() {
+    this.stopAutoUpdate();
+    this.remove.emit(this.timezone);
+  }
+
+  onTimezoneBlur() {
+    this.updateTimezone();
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.updateTimezone();
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  private updateTimezone() {
+    if (
+      this.allTimezones.includes(this.timezone) &&
+      !this.currentTimezones.includes(this.timezone)
+    ) {
+      const oldTimezone = this.previousTimezone;
+      this.previousTimezone = this.timezone;
+      this.timezoneUpdated.emit({ oldTimezone, newTimezone: this.timezone });
+    } else {
+      this.timezone = this.previousTimezone;
     }
   }
 }

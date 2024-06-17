@@ -1,13 +1,29 @@
 <div
+  class="timezone-container"
   (click)="selectTimezone()"
   [ngClass]="{ 'current-timezone': isCurrent, 'other-timezone': !isCurrent }"
 >
-  <p>Timezone: {{ timezone }}</p>
-  <p>Actual time: {{ currentTime }}</p>
-  <button
-    (click)="updateTime(); $event.stopPropagation()"
-    [disabled]="isCurrent"
-  >
-    Refresh
-  </button>
+  <p class="timezone-input">
+    <input
+      [(ngModel)]="timezone"
+      (blur)="onTimezoneBlur()"
+      (keydown)="onKeyDown($event)"
+      (click)="$event.stopPropagation()"
+    />
+  </p>
+  <p class="current-time">{{ currentTime | date : "hh:mm a" }}</p>
+  <div class="button-group">
+    <button
+      (click)="updateTime(); $event.stopPropagation()"
+      [disabled]="isCurrent"
+    >
+      Refresh
+    </button>
+    <button
+      class="delete-btn"
+      (click)="removeTimezone(); $event.stopPropagation()"
+    >
+      Delete
+    </button>
+  </div>
 </div>
